@@ -1,0 +1,39 @@
+# Build outputs
+x64/
+x86/
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.dll
+*.mll
+*.exe
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build logs
+*.log
+*.tlog/
+*.lastbuildstate
+*.mll.recipe
+
+# IntelliSense
+*.sdf
+*.opensdf
+*.db
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
