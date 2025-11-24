@@ -2,7 +2,8 @@
 
 ## TL;DR
 - Maya C++ plugin for fast surface and volume point-cloud generation.  
-- 20× faster (and often far more) than Maya's built-in Particle File emitter. 
+- Performance benchmarks show ~20× speed improvement (and often considerably more) 
+   compared to Maya's built-in Particle File emitter (based on tests in Maya 2020).
 - Supports color sampling, deforming meshes, multithreading, and PCD/PLY import / export. 
 - Developed originally for internal use in my Intel team.  
 
