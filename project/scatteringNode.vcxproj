@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6F3F8465-EB03-4946-AAA6-3BA3F9B1FCB7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>scatteringNode</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <PreferredToolArchitecture>
+    </PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.mll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.mll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SCATTERINGNODE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>BOOST_FILESYSTEM_NO_DEPRECATED;NT_PLUGIN;WIN32;_WIN64;NDEBUG;_WINDOWS;_USRDLL;Bits64_;REQUIRE_IOSTREAM;NOMINMAX;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_SECURE_SCL_THROWS=0;_SECURE_SCL_DEPRECATE=0;_CRT_SECURE_NO_DEPRECATE;TBB_USE_DEBUG=0;__TBB_LIB_NAME=tbb.lib;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>C:\vs_3rdParty\glew\glew-2.1.0-win32\glew-2.1.0\include;C:\Program Files\Autodesk\Maya2016\include;$(PCL_ROOT)\3rdParty\VTK\include\vtk-7.0;$(PCL_ROOT)\3rdParty\VTK\include;$(PCL_ROOT)\include\pcl-1.8;$(PCL_ROOT)\3rdParty\Eigen\eigen3;$(PCL_ROOT)\3rdParty\Boost\include\boost-1_64;$(PCL_ROOT)\3rdParty\FLANN\include;$(PCL_ROOT)\3rdParty\Qhull\include;$(SolutionDir)..\..\3rdParty\glm\glm-0.9.3.2;$(SolutionDir)..\..\3rdParty\glew\1.9\include;$(SolutionDir)..\..\3rdParty\freeType\2.4.9\include;$(OPENNI2_INCLUDE64);$(IPPROOT)include;$(GLM_ROOT);$(GLEW_ROOT)\$(GLEW_VERSION)\include;$(FREETYPE_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>C:\vs_3rdParty\glew\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Program Files\Autodesk\Maya2016\lib;$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;$(IPPROOT)lib\intel64;$(GLEW_ROOT)\$(GLEW_VERSION)\lib;$(SolutionDir)..\..\3rdParty\freeglut\lib;$(SolutionDir)..\..\3rdParty\freeType\2.4.9\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenMayaRender.lib;OpenMaya.lib;OpenMayaFX.lib;OpenMayaUI.lib;OpenMayaAnim.lib;Foundation.lib;opengl32.lib;glew32.lib;glu32.lib;winmm.lib;pcl_io_release.lib;pcl_common_release.lib;pcl_filters_release.lib;pcl_surface_release.lib;pcl_kdtree_release.lib;pcl_octree_release.lib;pcl_search_release.lib;pcl_features_release.lib;flann.lib;freetype249.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/export:initializePlugin /export:uninitializePlugin %(AdditionalOptions)</AdditionalOptions>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SCATTERINGNODE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WIN64;NDEBUG;_WINDOWS;_USRDLL;NT_PLUGIN;REQUIRE_IOSTREAM;_GLIBCXX_USE_CXX11_ABI=0;GLEW_STATIC;FMT_HEADER_ONLY=1;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\Maya2020\include;E:\Work_stuff\Open3D\include;E:\Work_stuff\Open3D\include\open3d\3rdparty;C:\vs_3rdParty\boost_1_74_0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\Maya2020\lib;C:\vs_3rdParty\boost_1_74_0\lib64-msvc-14.2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>E:\Work_stuff\Open3D\lib\Open3D.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_assimp_assimp-vc142-mt.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_assimp_IrrXML.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_glew.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_glfw3.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_jpeg.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_jsoncpp.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_lzf.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_png.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_zlib.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_rply.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_tinyfiledialogs.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_qhullcpp.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_qhull_r.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_imgui.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_filameshio.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_filament.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_filamat_lite.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_filaflat.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_filabridge.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_geometry.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_backend.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_bluegl.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_ibl.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_image.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_meshoptimizer.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_smol-v.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_utils.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_filament_bluevk.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_mkl_mkl_intel_ilp64.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_mkl_mkl_core.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_mkl_mkl_sequential.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_mkl_mkl_tbb_thread.lib;E:\Work_stuff\Open3D\lib\Open3D_3rdparty_mkl_tbb_static.lib;gdi32.lib;kernel32.lib;user32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;Foundation.lib;OpenMaya.lib;OpenMayaUI.lib;OpenMayaAnim.lib;OpenMayaFX.lib;OpenMayaRender.lib;Image.lib;Opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/export:initializePlugin /export:uninitializePlugin %(AdditionalOptions)</AdditionalOptions>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\pluginMain.cpp" />
+    <ClCompile Include="..\src\scatteringEmitter.cpp" />
+    <ClCompile Include="..\src\scatteringNodeCmd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\scatteringEmitter.h" />
+    <ClInclude Include="..\src\scatteringNodeCmd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
