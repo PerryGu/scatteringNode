@@ -3,7 +3,7 @@
 ## TL;DR
 - Maya C++ plugin for fast surface and volume point-cloud generation.  
 - Performance benchmarks show ~20× speed improvement (and often considerably more) 
-  compared to Maya's built-in Particle File emitter (based on tests in Maya 2016).
+  compared to Maya's built-in Particle File emitter (based on tests in Maya 2018).
 - Supports color sampling, deforming meshes, multithreading, and PCD/PLY import / export. 
 
 ---
@@ -122,17 +122,17 @@ This approach eliminates most per-point inside/outside checks and enables the 20
 - Maya C++ API (MPxEmitterNode, MPxCommand, MThreadPool).  
 - Open3D (point-cloud loading and saving: PLY/PCD).
 - Boost C++ Libraries.
-- Standard C++17 multithreading and containers . 
+- Standard C++14 multithreading and containers . 
 
 ---
 
 ## Build Requirements
 - C++17
 - Windows 10 
-- Maya 2016 SDK 
-- Visual Studio 2017 (MSVC 142 toolset)
+- Maya 2018 SDK 
+- Visual Studio 2015 (MSVC 140 toolset)
 - Open3D 1.1.1 (headers + libs placed under `/3rdparty/open3d/`)
-- Boost C++ Libraries  
+- Boost C++14 Standard  
   Required modules:  
   - `boost::filesystem` (directory & file detection)  
   - `boost::algorithm` (replace_all, join)
@@ -218,7 +218,7 @@ cmds.scatteringNodeCmd(randomPos=0.75)
 
 ## Status
 Legacy plugin.  
-Designed for Maya 2016, Visual Studio 2017, and Open3D v1.1.1, Boost.  
+Designed for Maya 2018, Visual Studio 2015, and Open3D v1.1.1, Boost.  
 Kept publicly to demonstrate experience with C++, Maya API, geometry processing, multithreading, and point-cloud tooling.  
 Not actively maintained.
 
