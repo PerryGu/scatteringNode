@@ -3,16 +3,13 @@
 ## TL;DR
 - Maya C++ plugin for fast surface and volume point-cloud generation.  
 - Performance benchmarks show ~20× speed improvement (and often considerably more) 
-   compared to Maya's built-in Particle File emitter (based on tests in Maya 2020).
+  compared to Maya's built-in Particle File emitter (based on tests in Maya 2016).
 - Supports color sampling, deforming meshes, multithreading, and PCD/PLY import / export. 
-- Developed originally for internal use in my Intel team.  
 
 ---
 
 ## Overview
-This is a Maya plugin written in C++, originally developed to support internal needs in my team at Intel.  
 The tool generates point clouds either on the surface of a mesh or inside its volume, and it fully supports animated / deforming geometry.
-
 It also performs shader-based color sampling, assigning each point the color coming from the mesh's texture or shading network.  
 The plugin supports exporting the generated points (from the particle system) as point-cloud files in multiple formats (PCD, PLY, ASCII, Binary, Binary Compressed), allowing them to be used directly in external tools (also import).  
 It can also display the points inside Maya either as a particle system or as a voxel-style mesh.
@@ -20,48 +17,75 @@ It can also display the points inside Maya either as a particle system or as a v
 Performance was a key goal.  
 The plugin generates points over 20× faster (and often far more) than Maya's built-in Particle File emitter.  
 
----
 
-## Demo Images
+### Project Inspiration
+This tool was inspired by a custom internal utility I developed for my team during my tenure as a CG Engineer at Replay. While the original tool addressed specific production needs,
+this personal project was rebuilt from the ground up as a legacy plugin to demonstrate advanced geometry processing, C++ optimization, and Maya API integration.
 
-### Volume Scatter
-![Volume Scatter](media/volume_scatter.png)
-
-### Deforming Mesh Scatter
-![Deforming Mesh Scatter](media/deforming_mesh_scatter.png)
-
-### Voxel-Style Mesh Preview
-![Voxel Mesh](media/voxel_mesh.png)
-
-### Color Sampling From Shading Network
-![Color Sampling](media/color_sampling.png)
-
-### Different Distribution Modes (Vertex / Surface / Volume)
-![Distribution Modes](media/distribution_modes.png)
 
 ---
 
-## Demo Videos
+---
 
-<table>
+## Video Showcase
+
+<table align="center" width="100%">
   <tr>
-    <td align="center"><b>Deforming Mesh Scatter</b></td>
-    <td align="center"><b>Scatter + Color Sampling</b></td>
+    <td align="center" width="50%">
+      <a href="https://www.youtube.com/watch?v=RGPSw1fAKh4">
+        <img src="https://img.youtube.com/vi/RGPSw1fAKh4/hqdefault.jpg" width="100%"/>
+      </a>
+      <br/>
+      <strong>Deforming Mesh Scatter</strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://www.youtube.com/watch?v=eiWVBHLJk74">
+        <img src="https://img.youtube.com/vi/eiWVBHLJk74/hqdefault.jpg" width="100%"/>
+      </a>
+      <br/>
+      <strong>Scatter + Color Sampling</strong>
+    </td>
+  </tr>
+</table>>
+
+## Image Gallery
+
+<table align="center" width="100%">
+  <tr>
+    <td align="center" width="33%">
+      <img src="media/volume_scatter.png" width="100%"/>
+      <br/>
+      <strong>Volume Scatter</strong>
+    </td>
+    <td align="center" width="33%">
+      <img src="media/deforming_mesh_scatter.png" width="100%"/>
+      <br/>
+      <strong>Deforming Mesh Scatter</strong>
+    </td>
+    <td align="center" width="33%">
+      <img src="media/voxel_mesh.png" width="100%"/>
+      <br/>
+      <strong>Voxel-Style Mesh Preview</strong>
+    </td>
   </tr>
   <tr>
-    <td>
-      <a href="https://www.youtube.com/watch?v=RGPSw1fAKh4">
-        <img src="https://img.youtube.com/vi/RGPSw1fAKh4/hqdefault.jpg" width="320">
-      </a>
+    <td align="center" width="33%">
+      <img src="media/color_sampling.png" width="100%"/>
+      <br/>
+      <strong>Color Sampling</strong>
     </td>
-    <td>
-      <a href="https://www.youtube.com/watch?v=eiWVBHLJk74">
-        <img src="https://img.youtube.com/vi/eiWVBHLJk74/hqdefault.jpg" width="320">
-      </a>
+    <td align="center" width="33%">
+      <img src="media/distribution_modes.png" width="100%"/>
+      <br/>
+      <strong>Distribution Modes</strong>
+    </td>
+    <td align="center" width="33%">
+      <img src="media/additional_showcase.png" width="100%"/>
+      <br/>
+      <strong>Advanced Showcase</strong>
     </td>
   </tr>
 </table>
-
 
 ---
 
@@ -105,8 +129,8 @@ This approach eliminates most per-point inside/outside checks and enables the 20
 ## Build Requirements
 - C++17
 - Windows 10 
-- Maya 2020 SDK 
-- Visual Studio 2019 (MSVC 142 toolset)
+- Maya 2016 SDK 
+- Visual Studio 2017 (MSVC 142 toolset)
 - Open3D 1.1.1 (headers + libs placed under `/3rdparty/open3d/`)
 - Boost C++ Libraries  
   Required modules:  
@@ -178,9 +202,9 @@ cmds.scatteringNodeCmd(randomPos=0.75)
 - Import pipeline still relies on a single-thread stage in heavy files.  
 - Error handling around Open3D exceptions is minimal.
 - The scatteringNode currently handles several unrelated concerns 
-  -(scattering, color sampling, file I/O, threading, and geometry utilities) 
-  -within a single implementation. This leads to a large source file that works well 
-  -for a legacy tool, but would likely be split into smaller modules in a modern codebase for clarity and maintainability.
+- (scattering, color sampling, file I/O, threading, and geometry utilities) 
+- within a single implementation. This leads to a large source file that works well 
+- for a legacy tool, but would likely be split into smaller modules in a modern codebase for clarity and maintainability.
 
 ---
 
@@ -194,15 +218,21 @@ cmds.scatteringNodeCmd(randomPos=0.75)
 
 ## Status
 Legacy plugin.  
-Designed for Maya 2020, Visual Studio 2019, and Open3D v1.1.1, Boost.  
+Designed for Maya 2016, Visual Studio 2017, and Open3D v1.1.1, Boost.  
 Kept publicly to demonstrate experience with C++, Maya API, geometry processing, multithreading, and point-cloud tooling.  
 Not actively maintained.
 
 ---
 
+## Contact & Author
+**Perry Guy** - Technical Artist & CG Engineer  
+*Extensive experience in 3D Graphics, Tool Development, and Performance Optimization.*
+
+📧 **Email**: [perryguy2@gmail.com](mailto:perryguy2@gmail.com)
+
+**YouTube Channel**: [@ThePerryGuy](https://www.youtube.com/@ThePerryGuy)
+
+
 ## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-Copyright (c) Guy Perry. All Rights Reserved.
-
-This code is provided for portfolio/educational purposes only.
-Unauthorized use, copying, or distribution is prohibited.
