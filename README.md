@@ -80,7 +80,7 @@ this personal project was rebuilt from the ground up as a legacy plugin to demon
       <strong>Distribution Modes</strong>
     </td>
     <td align="center" width="33%">
-      <img src="media/voxel_mesh_2.png.png" width="100%"/>
+      <img src="media/voxel_mesh_2.png" width="100%"/>
       <br/>
       <strong>Advanced Showcase</strong>
     </td>
