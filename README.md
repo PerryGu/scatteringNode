@@ -63,7 +63,7 @@ this personal project was rebuilt from the ground up as a legacy plugin to demon
       <strong>Deforming Mesh Scatter</strong>
     </td>
     <td align="center" width="33%">
-      <img src="media/voxel_mesh.png" width="100%"/>
+      <img src="media/voxel_mesh_1.png" width="100%"/>
       <br/>
       <strong>Voxel-Style Mesh Preview</strong>
     </td>
