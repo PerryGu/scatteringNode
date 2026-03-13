@@ -12,7 +12,7 @@ namespace
 // duplication later in the file.
 constexpr char kPluginVendor[] = "Guy Perry";
 constexpr char kPluginVersion[] = "maya2018_v1.1.1_open3D";
-constexpr char kPluginRequiredApi[] = "vs_19";
+constexpr char kPluginRequiredApi[] = "any";
 
 // Public names for the custom node and command.
 constexpr char kNodeName[] = "scatteringNode";
