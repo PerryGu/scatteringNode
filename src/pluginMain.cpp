@@ -11,7 +11,7 @@ namespace
 // Metadata describing this plugin. Keeping it here prevents typo-prone string
 // duplication later in the file.
 constexpr char kPluginVendor[] = "Guy Perry";
-constexpr char kPluginVersion[] = "maya2020_v1.1.1_open3D";
+constexpr char kPluginVersion[] = "maya2018_v1.1.1_open3D";
 constexpr char kPluginRequiredApi[] = "vs_19";
 
 // Public names for the custom node and command.
