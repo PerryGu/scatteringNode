@@ -109,6 +109,25 @@ All points between these two intersections are generated as a continuous line of
 This approach eliminates most per-point inside/outside checks and enables the 20×+ performance improvement.
 (The performance gap increases as the requested point count grows, making the advantage even more significant for heavy datasets).
 
+## Algorithm (High-Level)
+
+The tool avoids evaluating every point individually. Instead, it projects a regular grid from one side of the mesh's bounding box into the geometry. For each projection line, it detects only the **first** and **last** intersection points with the mesh. All points between these two intersections are generated as a continuous line of points. 
+
+This approach eliminates most per-point occupancy checks and enables the **20x+ performance improvement** (the performance gap increases as the point count grows, making the advantage even more significant for heavy datasets).
+
+<table align="center" border="0">
+  <tr>
+    <td align="center" width="50%">
+      <img src="media/agorithm_demo_sphere.gif" width="100%">
+      <br><i>Internal volume sampling (Sphere)</i>
+    </td>
+    <td align="center" width="50%">
+      <img src="media/agorithm_demo_torus.gif" width="100%">
+      <br><i>Boundary & Intersection detection (Torus)</i>
+    </td>
+  </tr>
+</table>
+
 ---
 
 ## Architecture
