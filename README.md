@@ -19,7 +19,7 @@ The plugin generates points over 20× faster (and often far more) than Maya's bu
 
 
 ### Project Inspiration
-This tool was inspired by a custom internal utility I developed for my team during my tenure as a CG Engineer at Replay. While the original tool addressed specific production needs,
+This tool was inspired by a custom internal utility I developed for my team during my tenure as a CG Engineer at Replay Technologies. While the original tool addressed specific production needs,
 this personal project was rebuilt from the ground up as a legacy plugin to demonstrate advanced geometry processing, C++ optimization, and Maya API integration.
 
 
