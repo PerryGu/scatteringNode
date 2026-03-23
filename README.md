@@ -8,23 +8,6 @@
 
 ---
 
-## Overview
-The tool generates point clouds either on the surface of a mesh or inside its volume, and it fully supports animated / deforming geometry.
-It also performs shader-based color sampling, assigning each point the color coming from the mesh's texture or shading network.  
-The plugin supports exporting the generated points (from the particle system) as point-cloud files in multiple formats (PCD, PLY, ASCII, Binary, Binary Compressed), allowing them to be used directly in external tools (also import).  
-It can also display the points inside Maya either as a particle system or as a voxel-style mesh.
-
-Performance was a key goal.  
-The plugin generates points over 20× faster (and often far more) than Maya's built-in Particle File emitter.  
-
-
-### Project Inspiration
-This tool was inspired by a custom internal utility I developed for my team during my tenure as a CG Engineer at Replay Technologies. While the original tool addressed specific production needs,
-this personal project was rebuilt from the ground up as a legacy plugin to demonstrate advanced geometry processing, C++ optimization, and Maya API integration.
-
-
----
-
 ---
 
 ## Video Showcase
@@ -86,6 +69,23 @@ this personal project was rebuilt from the ground up as a legacy plugin to demon
     </td>
   </tr>
 </table>
+
+---
+
+## Overview
+The tool generates point clouds either on the surface of a mesh or inside its volume, and it fully supports animated / deforming geometry.
+It also performs shader-based color sampling, assigning each point the color coming from the mesh's texture or shading network.  
+The plugin supports exporting the generated points (from the particle system) as point-cloud files in multiple formats (PCD, PLY, ASCII, Binary, Binary Compressed), allowing them to be used directly in external tools (also import).  
+It can also display the points inside Maya either as a particle system or as a voxel-style mesh.
+
+Performance was a key goal.  
+The plugin generates points over 20× faster (and often far more) than Maya's built-in Particle File emitter.  
+
+
+### Project Inspiration
+This tool was inspired by a custom internal utility I developed for my team during my tenure as a CG Engineer at Replay Technologies. While the original tool addressed specific production needs,
+this personal project was rebuilt from the ground up as a legacy plugin to demonstrate advanced geometry processing, C++ optimization, and Maya API integration.
+
 
 ---
 
