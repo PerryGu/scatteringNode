@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scatteringNode: 3D Ray Casting Algorithm Visualization</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      overflow: hidden;
+      background: #0d0d0d;
+    }
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+    }
+    #title-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 16px;
+      background: linear-gradient(180deg, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0.7) 70%, transparent 100%);
+      color: #c0c0c0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #step-buttons {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+    #step-buttons button {
+      padding: 8px 14px;
+      font-size: 12px;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: rgba(30, 30, 30, 0.9);
+      color: #c0c0c0;
+      border: 1px solid #505050;
+      border-radius: 4px;
+      cursor: pointer;
+      min-width: 180px;
+      text-align: left;
+    }
+    #step-buttons button:hover {
+      background: rgba(50, 50, 50, 0.95);
+      border-color: #707070;
+    }
+    #step-buttons button.active {
+      border-color: #ffaa00;
+      color: #ffcc66;
+    }
+    #step-buttons button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #step-buttons .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+    #step-buttons .slider-row.anim-highlight {
+      background: rgba(255, 170, 0, 0.15);
+    }
+    #step-buttons .slider-row label {
+      font-size: 12px;
+      color: #a0a0a0;
+      min-width: 100px;
+    }
+    #step-buttons input[type="range"] {
+      width: 120px;
+      accent-color: #ffaa00;
+    }
+    #step-buttons select {
+      padding: 4px 8px;
+      font-size: 12px;
+      background: rgba(30, 30, 30, 0.9);
+      color: #c0c0c0;
+      border: 1px solid #505050;
+      border-radius: 4px;
+      min-width: 80px;
+    }
+    #hud-counters {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #hud-counters span {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    #rays-count { color: #ffaa00; }
+    #green-dots-count { color: #22cc44; }
+    canvas { display: block; width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="canvas-container">
+    <div id="title-bar">scatteringNode: 3D Ray Casting Algorithm Visualization</div>
+    <div id="hud-counters">
+      <span id="rays-count">Rays count: 0</span>
+      <span id="green-dots-count">Inside points count: 0</span>
+    </div>
+    <div id="step-buttons">
+      <button type="button" id="btn-animation" title="Run animation: light up controls one by one">Animation</button>
+      <button type="button" id="btn-yellow-dots" title="Toggle raycast start positions">Raycast start pos vis</button>
+      <button type="button" id="btn-yellow-lines" title="Toggle raycast lines">Raycast vis</button>
+      <button type="button" id="btn-red-dots" title="Toggle entry/exit points">Entry/Exit points vis</button>
+      <div class="slider-row">
+        <label id="dots-label" for="dots-slider">Ray count: 6×6</label>
+        <input type="range" id="dots-slider" min="4" max="24" value="6" title="Number of yellow dots per side">
+      </div>
+      <div class="slider-row">
+        <label id="green-label" for="green-slider">Numb of points for ray: 0.80</label>
+        <input type="range" id="green-slider" min="5" max="80" value="5" title="More right = more dots (reversed: controls density)">
+      </div>
+      <div class="slider-row">
+        <label id="sphere-opacity-label" for="sphere-opacity-slider">Sphere opacity: 80%</label>
+        <input type="range" id="sphere-opacity-slider" min="0" max="100" value="80" title="Sphere transparency">
+      </div>
+      <div class="slider-row">
+        <label id="lines-opacity-label" for="lines-opacity-slider">Raycast vis sld: 35%</label>
+        <input type="range" id="lines-opacity-slider" min="0" max="100" value="35" title="Yellow lines transparency">
+      </div>
+      <div class="slider-row">
+        <label id="anim-speed-label" for="anim-speed-slider">Animation speed: 4.0 s</label>
+        <input type="range" id="anim-speed-slider" min="5" max="100" value="40" title="Total animation duration (0.5 s to 10 s)">
+      </div>
+      <div class="slider-row">
+        <label id="anim-wait-label" for="anim-wait-slider">End pause: 3.0 s</label>
+        <input type="range" id="anim-wait-slider" min="0" max="50" value="30" title="Wait at end of loop before reset (0 to 5 s)">
+      </div>
+      <div class="slider-row">
+        <label for="axis-select">Raycast axe</label>
+        <select id="axis-select" title="Wall and ray direction">
+          <option value="z">Z</option>
+          <option value="x">X</option>
+          <option value="y">Y</option>
+        </select>
+      </div>
+      <div class="slider-row">
+        <label for="shape-select">Shape</label>
+        <select id="shape-select" title="Target mesh for ray casting">
+          <option value="sphere">Sphere</option>
+          <option value="torus">Torus</option>
+        </select>
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    const container = document.getElementById('canvas-container');
+    const canvas = document.getElementById('canvas');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a1a);
+
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+    camera.position.set(8, 6, 8);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.screenSpacePanning = true;
+    controls.minDistance = 2;
+    controls.maxDistance = 50;
+    controls.target.set(0, 0, 0);
+
+    // Maya-like grid on the ground (XZ plane)
+    const gridSize = 20;
+    const gridDivisions = 20;
+    const gridColor1 = 0x333333;
+    const gridColor2 = 0x2a2a2a;
+    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, gridColor1, gridColor2);
+    gridHelper.position.y = -3;
+    scene.add(gridHelper);
+
+    // Stronger axis lines (Maya-style)
+    const axesSize = gridSize / 2;
+    const axesMat = new THREE.LineBasicMaterial({ color: 0x404040 });
+    const axesGeos = [
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-axesSize, -3, 0), new THREE.Vector3(axesSize, -3, 0)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -3, -axesSize), new THREE.Vector3(0, -3, axesSize)])
+    ];
+    axesGeos.forEach(g => scene.add(new THREE.Line(g, axesMat)));
+
+    // Bounding box (white wireframe), centered — per-axis size for torus (narrower on Y)
+    const boxSizeDefault = 4;
+    const halfDefault = boxSizeDefault / 2;
+    const halfTorusX = 2, halfTorusY = 1, halfTorusZ = 2;
+    let halfX = halfDefault, halfY = halfDefault, halfZ = halfDefault;
+    const boxGeom = new THREE.BoxGeometry(boxSizeDefault, boxSizeDefault, boxSizeDefault);
+    const boxEdges = new THREE.EdgesGeometry(boxGeom);
+    const boxWire = new THREE.LineSegments(boxEdges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    scene.add(boxWire);
+
+    // Target mesh (any geometry: sphere, torus, etc.) — used for raycaster intersection
+    const sphereRadius = 1.98;
+    const sphereGeom = new THREE.SphereGeometry(sphereRadius, 32, 24);
+    const sphereMat = new THREE.MeshStandardMaterial({
+      color: 0x4080c0,
+      metalness: 0.3,
+      roughness: 0.6,
+      wireframe: false,
+      transparent: true,
+      opacity: 0.45,
+      side: THREE.DoubleSide
+    });
+    const sphere = new THREE.Mesh(sphereGeom, sphereMat);
+    sphere.position.set(0, 0, 0);
+    scene.add(sphere);
+    const sphereWireMat = new THREE.MeshBasicMaterial({
+      color: 0x6080a0,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.45
+    });
+    const sphereWire = new THREE.Mesh(sphereGeom.clone(), sphereWireMat);
+    sphereWire.position.set(0, 0, 0);
+    scene.add(sphereWire);
+    const torusGeom = new THREE.TorusGeometry(1.2, 0.5, 32, 48);
+    const torusMat = new THREE.MeshStandardMaterial({
+      color: 0x4080c0,
+      metalness: 0.3,
+      roughness: 0.6,
+      wireframe: false,
+      transparent: true,
+      opacity: 0.45,
+      side: THREE.DoubleSide
+    });
+    const torus = new THREE.Mesh(torusGeom, torusMat);
+    torus.position.set(0, 0, 0);
+    torus.rotation.x = Math.PI / 2;
+    torus.visible = false;
+    scene.add(torus);
+    const torusWireMat = new THREE.MeshBasicMaterial({
+      color: 0x6080a0,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.45
+    });
+    const torusWire = new THREE.Mesh(torusGeom.clone(), torusWireMat);
+    torusWire.position.set(0, 0, 0);
+    torusWire.rotation.x = Math.PI / 2;
+    torusWire.visible = false;
+    scene.add(torusWire);
+    let targetMesh = sphere;
+
+    const raycaster = new THREE.Raycaster();
+    raycaster.far = Math.max(halfX + halfX, halfY + halfY, halfZ + halfZ) * 1.1;
+
+    const facePointGeom = new THREE.SphereGeometry(0.0195, 12, 8);
+    const facePointMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+    const facePointsGroup = new THREE.Group();
+    const throughLinesGroup = new THREE.Group();
+    const entryExitDotsGroup = new THREE.Group();
+    const greenDotsGroup = new THREE.Group();
+    const redDotGeom = new THREE.SphereGeometry(0.0325, 12, 10);
+    const redDotMat = new THREE.MeshBasicMaterial({ color: 0xff2222 });
+    const greenDotGeom = new THREE.SphereGeometry(0.02, 8, 6);
+    const greenDotMat = new THREE.MeshBasicMaterial({ color: 0x22cc44 });
+    const lineMat = new THREE.LineBasicMaterial({
+      color: 0xffaa00,
+      transparent: true,
+      opacity: 0.7
+    });
+    const lineMatInside = new THREE.LineBasicMaterial({
+      color: 0xffaa00,
+      transparent: true,
+      opacity: 0.7,
+      depthTest: false
+    });
+    const linesOpacitySlider = document.getElementById('lines-opacity-slider');
+    const linesOpacityLabel = document.getElementById('lines-opacity-label');
+    function updateLinesOpacity() {
+      const pct = parseInt(linesOpacitySlider.value, 10);
+      const opacity = pct / 100;
+      lineMat.opacity = opacity;
+      lineMat.transparent = pct < 100;
+      lineMatInside.opacity = opacity;
+      lineMatInside.transparent = pct < 100;
+      linesOpacityLabel.textContent = 'Raycast vis sld: ' + pct + '%';
+    }
+    linesOpacitySlider.addEventListener('input', updateLinesOpacity);
+    updateLinesOpacity();
+    let currentGridRes = 6;
+    let greenDotSpacing = 0.2;
+    let currentAxis = 'z';
+
+    function getRayForCell(axis, i, j, gridResX, gridResY) {
+      const u = gridResX > 1 ? i / (gridResX - 1) : 0.5;
+      const v = gridResY > 1 ? j / (gridResY - 1) : 0.5;
+      let origin, direction, frontPos, backPos;
+      if (axis === 'z') {
+        const a = -halfX + u * (2 * halfX);
+        const b = -halfY + v * (2 * halfY);
+        origin = new THREE.Vector3(a, b, halfZ);
+        direction = new THREE.Vector3(0, 0, -1);
+        frontPos = new THREE.Vector3(a, b, halfZ);
+        backPos = new THREE.Vector3(a, b, -halfZ);
+      } else if (axis === 'x') {
+        const a = -halfY + u * (2 * halfY);
+        const b = -halfZ + v * (2 * halfZ);
+        origin = new THREE.Vector3(halfX, a, b);
+        direction = new THREE.Vector3(-1, 0, 0);
+        frontPos = new THREE.Vector3(halfX, a, b);
+        backPos = new THREE.Vector3(-halfX, a, b);
+      } else {
+        const a = -halfX + u * (2 * halfX);
+        const b = -halfZ + v * (2 * halfZ);
+        origin = new THREE.Vector3(a, halfY, b);
+        direction = new THREE.Vector3(0, -1, 0);
+        frontPos = new THREE.Vector3(a, halfY, b);
+        backPos = new THREE.Vector3(a, -halfY, b);
+      }
+      return { origin, direction, frontPos, backPos };
+    }
+
+    function buildGreenPoints() {
+      while (greenDotsGroup.children.length) greenDotsGroup.remove(greenDotsGroup.children[0]);
+      const countEl = document.getElementById('green-dots-count');
+      if (greenDotSpacing <= 0 || !targetMesh) {
+        if (countEl) countEl.textContent = 'Inside points count: 0';
+        return;
+      }
+      const gridResX = currentGridRes;
+      const gridResY = currentGridRes;
+      const axis = currentAxis;
+      for (let j = 0; j < gridResY; j++) {
+        for (let i = 0; i < gridResX; i++) {
+          const { origin, direction, frontPos, backPos } = getRayForCell(axis, i, j, gridResX, gridResY);
+          raycaster.set(origin, direction);
+          const hits = raycaster.intersectObject(targetMesh);
+          for (let k = 0; k + 1 < hits.length; k += 2) {
+            const entry = hits[k].point;
+            const exit = hits[k + 1].point;
+            const lineLength = entry.distanceTo(exit);
+            const n = Math.max(0, Math.floor(lineLength / greenDotSpacing) - 1);
+            for (let g = 1; g <= n; g++) {
+              const t = g / (n + 1);
+              const pos = entry.clone().lerp(exit, t);
+              const dot = new THREE.Mesh(greenDotGeom, greenDotMat);
+              dot.position.copy(pos);
+              greenDotsGroup.add(dot);
+            }
+          }
+        }
+      }
+      if (countEl) countEl.textContent = 'Inside points count: ' + greenDotsGroup.children.length;
+    }
+
+    function buildGrid(gridRes) {
+      gridRes = Math.max(4, Math.min(24, gridRes));
+      currentGridRes = gridRes;
+      while (facePointsGroup.children.length) facePointsGroup.remove(facePointsGroup.children[0]);
+      while (throughLinesGroup.children.length) throughLinesGroup.remove(throughLinesGroup.children[0]);
+      while (entryExitDotsGroup.children.length) entryExitDotsGroup.remove(entryExitDotsGroup.children[0]);
+      const gridResX = gridRes;
+      const gridResY = gridRes;
+      const axis = currentAxis;
+      for (let j = 0; j < gridResY; j++) {
+        for (let i = 0; i < gridResX; i++) {
+          const { origin, direction, frontPos, backPos } = getRayForCell(axis, i, j, gridResX, gridResY);
+          const pt = new THREE.Mesh(facePointGeom, facePointMat);
+          pt.position.copy(frontPos);
+          facePointsGroup.add(pt);
+          let hits = [];
+          if (targetMesh) {
+            raycaster.set(origin, direction);
+            hits = raycaster.intersectObject(targetMesh);
+          }
+          if (hits.length > 0) {
+            throughLinesGroup.add(new THREE.Line(
+              new THREE.BufferGeometry().setFromPoints([frontPos, hits[0].point]),
+              lineMat
+            ));
+            for (let k = 0; k < hits.length; k++) {
+              const dot = new THREE.Mesh(redDotGeom, redDotMat);
+              dot.position.copy(hits[k].point);
+              entryExitDotsGroup.add(dot);
+            }
+            for (let k = 0; k + 1 < hits.length; k++) {
+              const segMat = (k % 2 === 0) ? lineMatInside : lineMat;
+              throughLinesGroup.add(new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints([hits[k].point, hits[k + 1].point]),
+                segMat
+              ));
+            }
+            throughLinesGroup.add(new THREE.Line(
+              new THREE.BufferGeometry().setFromPoints([hits[hits.length - 1].point, backPos]),
+              lineMat
+            ));
+          } else {
+            throughLinesGroup.add(new THREE.Line(
+              new THREE.BufferGeometry().setFromPoints([frontPos, backPos]),
+              lineMat
+            ));
+          }
+        }
+      }
+      buildGreenPoints();
+      const raysEl = document.getElementById('rays-count');
+      if (raysEl) raysEl.textContent = 'Rays count: ' + (currentGridRes * currentGridRes);
+    }
+
+    function updateRaycasterFar() {
+      raycaster.far = Math.max(2 * halfX, 2 * halfY, 2 * halfZ) * 1.1;
+    }
+
+    buildGrid(6);
+    scene.add(facePointsGroup);
+    scene.add(throughLinesGroup);
+    scene.add(entryExitDotsGroup);
+    scene.add(greenDotsGroup);
+    facePointsGroup.visible = false;
+    throughLinesGroup.visible = false;
+    entryExitDotsGroup.visible = false;
+
+    const dotsSlider = document.getElementById('dots-slider');
+    const dotsLabel = document.getElementById('dots-label');
+    function updateDotsLabel() {
+      const n = parseInt(dotsSlider.value, 10);
+      dotsLabel.textContent = 'Ray count: ' + n + '×' + n;
+    }
+    dotsSlider.addEventListener('input', () => {
+      const n = parseInt(dotsSlider.value, 10);
+      updateDotsLabel();
+      buildGrid(n);
+    });
+    updateDotsLabel();
+
+    const axisSelect = document.getElementById('axis-select');
+    axisSelect.addEventListener('change', () => {
+      currentAxis = axisSelect.value;
+      buildGrid(currentGridRes);
+    });
+
+    const shapeSelect = document.getElementById('shape-select');
+    shapeSelect.addEventListener('change', () => {
+      const shape = shapeSelect.value;
+      sphere.visible = torus.visible = false;
+      sphereWire.visible = torusWire.visible = false;
+      if (shape === 'torus') {
+        targetMesh = torus;
+        torus.visible = true;
+        torusWire.visible = true;
+        halfX = halfTorusX;
+        halfY = halfTorusY;
+        halfZ = halfTorusZ;
+        boxWire.scale.set((2 * halfX) / boxSizeDefault, (2 * halfY) / boxSizeDefault, (2 * halfZ) / boxSizeDefault);
+      } else {
+        targetMesh = sphere;
+        sphere.visible = true;
+        sphereWire.visible = true;
+        halfX = halfY = halfZ = halfDefault;
+        boxWire.scale.set(1, 1, 1);
+      }
+      updateRaycasterFar();
+      buildGrid(currentGridRes);
+    });
+
+    const greenSlider = document.getElementById('green-slider');
+    const greenLabel = document.getElementById('green-label');
+    function updateGreenLabel() {
+      const raw = parseInt(greenSlider.value, 10);
+      greenDotSpacing = (85 - raw) / 100;
+      greenLabel.textContent = 'Numb of points for ray: ' + greenDotSpacing.toFixed(2);
+    }
+    greenSlider.addEventListener('input', () => {
+      updateGreenLabel();
+      buildGreenPoints();
+    });
+    updateGreenLabel();
+
+    document.getElementById('btn-yellow-dots').addEventListener('click', () => {
+      facePointsGroup.visible = !facePointsGroup.visible;
+      document.getElementById('btn-yellow-dots').classList.toggle('active', facePointsGroup.visible);
+    });
+    document.getElementById('btn-yellow-lines').addEventListener('click', () => {
+      throughLinesGroup.visible = !throughLinesGroup.visible;
+      document.getElementById('btn-yellow-lines').classList.toggle('active', throughLinesGroup.visible);
+    });
+    document.getElementById('btn-red-dots').addEventListener('click', () => {
+      entryExitDotsGroup.visible = !entryExitDotsGroup.visible;
+      document.getElementById('btn-red-dots').classList.toggle('active', entryExitDotsGroup.visible);
+    });
+
+    const ANIM_NUM_STEPS = 6;
+    let animationRunning = false;
+    let animationLoopOn = false;
+
+    function highlightSliderRow(inputId, durationMs) {
+      const row = document.getElementById(inputId).closest('.slider-row');
+      if (row) {
+        row.classList.add('anim-highlight');
+        setTimeout(() => row.classList.remove('anim-highlight'), durationMs);
+      }
+    }
+
+    function animateSlider(sliderEl, fromVal, toVal, durationMs, abortToken) {
+      const start = performance.now();
+      function tick(now) {
+        if (abortToken && abortToken.aborted) return;
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / durationMs);
+        const val = fromVal + (toVal - fromVal) * t;
+        sliderEl.value = Math.round(val);
+        sliderEl.dispatchEvent(new Event('input'));
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function resetToInitialState() {
+      facePointsGroup.visible = false;
+      throughLinesGroup.visible = false;
+      entryExitDotsGroup.visible = false;
+      document.getElementById('btn-yellow-dots').classList.remove('active');
+      document.getElementById('btn-yellow-lines').classList.remove('active');
+      document.getElementById('btn-red-dots').classList.remove('active');
+      const dotsSliderEl = document.getElementById('dots-slider');
+      const greenSliderEl = document.getElementById('green-slider');
+      const sphereOpacityEl = document.getElementById('sphere-opacity-slider');
+      const linesOpacityEl = document.getElementById('lines-opacity-slider');
+      dotsSliderEl.value = 6;
+      dotsSliderEl.dispatchEvent(new Event('input'));
+      greenSliderEl.value = 5;
+      greenSliderEl.dispatchEvent(new Event('input'));
+      sphereOpacityEl.value = 80;
+      sphereOpacityEl.dispatchEvent(new Event('input'));
+      linesOpacityEl.value = 35;
+      linesOpacityEl.dispatchEvent(new Event('input'));
+    }
+
+    const animSpeedSlider = document.getElementById('anim-speed-slider');
+    const animSpeedLabel = document.getElementById('anim-speed-label');
+    function updateAnimSpeedLabel() {
+      const sec = parseInt(animSpeedSlider.value, 10) / 10;
+      animSpeedLabel.textContent = 'Animation speed: ' + sec.toFixed(1) + ' s';
+    }
+    animSpeedSlider.addEventListener('input', updateAnimSpeedLabel);
+    updateAnimSpeedLabel();
+
+    const animWaitSlider = document.getElementById('anim-wait-slider');
+    const animWaitLabel = document.getElementById('anim-wait-label');
+    function updateAnimWaitLabel() {
+      const sec = parseInt(animWaitSlider.value, 10) / 10;
+      animWaitLabel.textContent = 'End pause: ' + sec.toFixed(1) + ' s';
+    }
+    animWaitSlider.addEventListener('input', updateAnimWaitLabel);
+    updateAnimWaitLabel();
+
+    function runOneCycle() {
+      if (!animationLoopOn || animationRunning) return;
+      animationRunning = true;
+      const cycleAbort = { aborted: false };
+      const durationSec = parseInt(animSpeedSlider.value, 10) / 10;
+      const stepMs = (durationSec * 1000) / ANIM_NUM_STEPS;
+      const btn1 = document.getElementById('btn-yellow-dots');
+      const btn2 = document.getElementById('btn-yellow-lines');
+      const btn3 = document.getElementById('btn-red-dots');
+      const dotsSliderEl = document.getElementById('dots-slider');
+      const greenSliderEl = document.getElementById('green-slider');
+      const sphereOpacityEl = document.getElementById('sphere-opacity-slider');
+      const linesOpacityEl = document.getElementById('lines-opacity-slider');
+      setTimeout(() => {
+        facePointsGroup.visible = true;
+        btn1.classList.add('active');
+      }, 0);
+      setTimeout(() => {
+        throughLinesGroup.visible = true;
+        btn2.classList.add('active');
+      }, stepMs);
+      setTimeout(() => {
+        entryExitDotsGroup.visible = true;
+        btn3.classList.add('active');
+      }, stepMs * 2);
+      setTimeout(() => {
+        highlightSliderRow('dots-slider', stepMs);
+        animateSlider(dotsSliderEl, 6, 15, stepMs, cycleAbort);
+      }, stepMs * 3);
+      setTimeout(() => {
+        highlightSliderRow('green-slider', stepMs);
+        animateSlider(greenSliderEl, 5, 67, stepMs, cycleAbort);
+      }, stepMs * 4);
+      setTimeout(() => {
+        highlightSliderRow('sphere-opacity-slider', stepMs);
+        animateSlider(sphereOpacityEl, 80, 12, stepMs, cycleAbort);
+      }, stepMs * 5);
+      setTimeout(() => {
+        highlightSliderRow('lines-opacity-slider', stepMs);
+        animateSlider(linesOpacityEl, 35, 5, stepMs, cycleAbort);
+        setTimeout(() => {
+          cycleAbort.aborted = true;
+          const endPauseSec = parseInt(animWaitSlider.value, 10) / 10;
+          const waitMs = endPauseSec * 1000;
+          setTimeout(() => {
+            animationRunning = false;
+            resetToInitialState();
+            if (animationLoopOn) {
+              setTimeout(runOneCycle, 0);
+            }
+          }, waitMs);
+        }, stepMs);
+      }, stepMs * 6);
+    }
+
+    document.getElementById('btn-animation').addEventListener('click', () => {
+      animationLoopOn = !animationLoopOn;
+      const btnAnim = document.getElementById('btn-animation');
+      btnAnim.classList.toggle('active', animationLoopOn);
+      if (animationLoopOn) {
+        runOneCycle();
+      }
+    });
+
+    animationLoopOn = true;
+    document.getElementById('btn-animation').classList.add('active');
+    runOneCycle();
+
+    const sphereOpacitySlider = document.getElementById('sphere-opacity-slider');
+    const sphereOpacityLabel = document.getElementById('sphere-opacity-label');
+    function updateSphereOpacity() {
+      const pct = parseInt(sphereOpacitySlider.value, 10);
+      const opacity = pct / 100;
+      sphereMat.opacity = torusMat.opacity = opacity;
+      sphereMat.transparent = torusMat.transparent = pct < 100;
+      sphereWireMat.opacity = torusWireMat.opacity = opacity;
+      sphereWireMat.transparent = torusWireMat.transparent = pct < 100;
+      sphereOpacityLabel.textContent = 'Sphere opacity: ' + pct + '%';
+    }
+    sphereOpacitySlider.addEventListener('input', updateSphereOpacity);
+    updateSphereOpacity();
+
+    // Subtle fill light (Maya viewport feel)
+    const ambient = new THREE.AmbientLight(0x404060, 0.6);
+    scene.add(ambient);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    keyLight.position.set(5, 8, 5);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0x6080a0, 0.3);
+    fillLight.position.set(-5, 4, -5);
+    scene.add(fillLight);
+
+    function onResize() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', onResize);
+    onResize();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
