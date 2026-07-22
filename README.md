@@ -111,12 +111,6 @@ All points between these two intersections are generated as a continuous line of
 This approach eliminates most per-point inside/outside checks and enables the 20×+ performance improvement.
 (The performance gap increases as the requested point count grows, making the advantage even more significant for heavy datasets).
 
-## Algorithm (High-Level)
-
-The tool avoids evaluating every point individually. Instead, it projects a regular grid from one side of the mesh's bounding box into the geometry. For each projection line, it detects only the **first** and **last** intersection points with the mesh. All points between these two intersections are generated as a continuous line of points. 
-
-This approach eliminates most per-point occupancy checks and enables the **20x+ performance improvement** (the performance gap increases as the point count grows, making the advantage even more significant for heavy datasets).
-
 🚀 [Live Web Demo - Try It Online!](https://perrygu.github.io/scatteringNode/)
 
 <table align="center" border="0">
