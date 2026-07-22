@@ -117,6 +117,8 @@ The tool avoids evaluating every point individually. Instead, it projects a regu
 
 This approach eliminates most per-point occupancy checks and enables the **20x+ performance improvement** (the performance gap increases as the point count grows, making the advantage even more significant for heavy datasets).
 
+### 🚀 [Live Web Demo - Try It Online!](https://perrygu.github.io/scatteringNode/)
+
 <table align="center" border="0">
   <tr>
     <td align="center" width="50%">
