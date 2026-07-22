@@ -6,7 +6,7 @@
   compared to Maya's built-in Particle File emitter (based on tests in Maya 2018).
 - Supports color sampling, deforming meshes, multithreading, and PCD/PLY import / export. 
 
-# 🚀 [Live Web Demo - Try It Online!](https://perrygu.github.io/scatteringNode/)
+### 🚀 [Live Web Demo - Try It Online!](https://perrygu.github.io/scatteringNode/)
 
 ---
 
