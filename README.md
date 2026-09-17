@@ -239,6 +239,14 @@ Not actively maintained.
 
 ---
 
+---
+
+## See also
+
+- [scatteringNet](https://github.com/PerryGu/scatteringNet) — occupancy network for the same volume-fill question (CAD train, inspect on shapes not in the catalog). Not a replacement for this plugin; a ray test is still the production path.
+
+---
+
 ## Contact & Author
 **Perry Guy** - Technical Artist & CG Engineer  
 *Extensive experience in 3D Graphics, Tool Development, and Performance Optimization.*
