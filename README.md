@@ -241,8 +241,11 @@ Not actively maintained.
 
 ---
 
+---
+
 ## See also
 
+- [pcLoader](https://github.com/PerryGu/pcLoader) — Maya suite for loading, filtering, raycasting, clustering, and viewing PCL/PLY point clouds.
 - [scatteringNet](https://github.com/PerryGu/scatteringNet) — occupancy network for the same volume-fill question (CAD train, inspect on shapes not in the catalog). Not a replacement for this plugin; a ray test is still the production path.
 
 ---
