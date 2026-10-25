@@ -252,7 +252,7 @@ Not actively maintained.
 ---
 
 ## Contact & Author
-**Perry Guy** - Software Engineer & Technical Artist.
+**Perry Guy** - Software Engineer & Technical Artist  
 *Extensive experience in 3D Graphics, Tool Development, and Performance Optimization.*
 
 📧 **Email**: [perryguy2@gmail.com](mailto:perryguy2@gmail.com)
